@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Vertical To-Do List</title>
+  <title>Scalable Vertical To-Do List</title>
   <style>
     :root {
       --header-bg: #c6def5;
@@ -26,13 +26,25 @@
       overflow: hidden;
       background-color: transparent;
       font-family: Georgia, "Times New Roman", Times, serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    /* 고정 크기 대신 노션 창 크기에 맞춰 100% 유동적으로 채우기 */
+    /* 기준이 되는 오리지널 크기 (240px × 340px) */
+    .scaler-wrapper {
+      width: 240px;
+      height: 340px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform-origin: center center;
+    }
+
     .todo-widget {
       position: relative;
-      width: 100%;
-      height: 100%;
+      width: 240px;
+      height: 340px;
       background-color: var(--body-bg);
       border-radius: 0px;
       display: flex;
@@ -41,12 +53,11 @@
       user-select: none;
     }
 
-    /* 상단 헤더: 전체 높이의 15% 차지 */
+    /* 상단 헤더 */
     .todo-header {
       background-color: var(--header-bg);
-      height: 15%;
-      min-height: 32px;
-      padding: 0 5%;
+      height: 42px;
+      padding: 0 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -54,7 +65,7 @@
     }
 
     .todo-title {
-      font-size: clamp(10px, 5.5vmin, 15px);
+      font-size: 14px;
       font-weight: 700;
       color: var(--text-main);
       letter-spacing: 0.5px;
@@ -62,7 +73,7 @@
     }
 
     .task-count {
-      font-size: clamp(8px, 4vmin, 12px);
+      font-size: 11.5px;
       color: var(--text-sub);
       font-family: sans-serif;
     }
@@ -70,30 +81,27 @@
     /* 본문 영역 */
     .todo-body {
       flex: 1;
-      padding: 4% 5% 5%;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
-      gap: 3%;
+      gap: 10px;
       overflow: hidden;
     }
 
-    /* 입력창 영역 */
     .todo-input-box {
       display: flex;
-      gap: 4px;
+      gap: 6px;
       flex-shrink: 0;
-      height: 15%;
-      min-height: 24px;
     }
 
     .todo-input {
       flex: 1;
-      height: 100%;
-      padding: 0 6px;
+      height: 28px;
+      padding: 0 8px;
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 0px;
       background: #ffffff;
-      font-size: clamp(9px, 4.5vmin, 13px);
+      font-size: 12px;
       color: var(--text-main);
       outline: none;
     }
@@ -103,14 +111,13 @@
     }
 
     .add-btn {
-      width: 15%;
-      max-width: 32px;
-      height: 100%;
+      width: 28px;
+      height: 28px;
       background-color: var(--accent-bg);
       color: #ffffff;
       border: none;
       border-radius: 0px;
-      font-size: clamp(12px, 6vmin, 18px);
+      font-size: 16px;
       cursor: pointer;
       display: flex;
       justify-content: center;
@@ -123,7 +130,7 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
       padding-right: 2px;
     }
 
@@ -139,8 +146,8 @@
       align-items: center;
       justify-content: space-between;
       background: rgba(255, 255, 255, 0.65);
-      padding: 4% 6px;
-      font-size: clamp(9px, 4.5vmin, 13px);
+      padding: 6px 8px;
+      font-size: 12px;
       color: var(--text-main);
       border-radius: 0px;
       flex-shrink: 0;
@@ -161,15 +168,13 @@
     .todo-left {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       overflow: hidden;
     }
 
     .todo-checkbox {
       cursor: pointer;
       accent-color: var(--accent-bg);
-      width: clamp(10px, 4vmin, 14px);
-      height: clamp(10px, 4vmin, 14px);
     }
 
     .todo-text {
@@ -189,7 +194,7 @@
       background: none;
       border: none;
       cursor: pointer;
-      font-size: clamp(11px, 5vmin, 15px);
+      font-size: 14px;
       color: #d1d5db;
       padding: 0 2px;
     }
@@ -202,7 +207,7 @@
       border: none;
       color: #999;
       cursor: pointer;
-      font-size: clamp(11px, 5vmin, 15px);
+      font-size: 14px;
       padding: 0 2px;
     }
     .delete-btn:hover {
@@ -212,14 +217,14 @@
     /* 팔레트 버튼 */
     .theme-toggle-btn {
       position: absolute;
-      bottom: 4px;
-      right: 4px;
-      width: 20px;
-      height: 20px;
+      bottom: 6px;
+      right: 6px;
+      width: 22px;
+      height: 22px;
       background-color: rgba(255, 255, 255, 0.85);
       border: 1px solid rgba(0, 0, 0, 0.1);
       cursor: pointer;
-      font-size: 11px;
+      font-size: 12px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -236,7 +241,7 @@
       position: absolute;
       inset: 0;
       background-color: rgba(255, 255, 255, 0.98);
-      padding: 6%;
+      padding: 16px;
       display: none;
       flex-direction: column;
       justify-content: space-between;
@@ -252,17 +257,17 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: clamp(10px, 4.5vmin, 13px);
+      font-size: 12.5px;
       font-weight: 700;
       color: #222;
       border-bottom: 1px solid #eee;
-      padding-bottom: 4px;
+      padding-bottom: 6px;
     }
 
     .close-btn {
       background: none;
       border: none;
-      font-size: 15px;
+      font-size: 16px;
       cursor: pointer;
       color: #666;
     }
@@ -271,13 +276,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: clamp(9px, 4vmin, 12px);
+      font-size: 11.5px;
       color: #444;
     }
 
     .color-row input[type="color"] {
-      width: 28px;
-      height: 18px;
+      width: 32px;
+      height: 20px;
       border: 1px solid #ddd;
       padding: 0;
       background: none;
@@ -286,23 +291,23 @@
 
     .preset-row {
       display: flex;
-      gap: 5px;
+      gap: 6px;
       justify-content: center;
     }
 
     .preset-btn {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       border: 1px solid #ccc;
       cursor: pointer;
     }
 
     .reset-btn {
       width: 100%;
-      padding: 4px;
+      padding: 5px;
       background-color: #f3f4f6;
       border: 1px solid #d1d5db;
-      font-size: clamp(9px, 3.8vmin, 11px);
+      font-size: 11px;
       font-weight: 600;
       color: #374151;
       cursor: pointer;
@@ -311,186 +316,47 @@
 </head>
 <body>
 
-  <div class="todo-widget">
-    <div class="todo-header">
-      <div class="todo-title">To do</div>
-      <div class="task-count" id="taskCount">0/0 done</div>
-    </div>
-
-    <div class="todo-body">
-      <div class="todo-input-box">
-        <input type="text" class="todo-input" id="todoInput" placeholder="할 일을 입력하세요..." autocomplete="off">
-        <button class="add-btn" id="addBtn">+</button>
+  <div class="scaler-wrapper" id="scalerWrapper">
+    <div class="todo-widget">
+      <div class="todo-header">
+        <div class="todo-title">To do</div>
+        <div class="task-count" id="taskCount">0/0 done</div>
       </div>
-      <div class="todo-list" id="todoList"></div>
-    </div>
 
-    <button class="theme-toggle-btn" id="openThemeBtn" title="색상 설정">🎨</button>
-
-    <div class="theme-panel" id="themePanel">
-      <div class="panel-header">
-        <span>To do 색상 설정</span>
-        <button class="close-btn" id="closeThemeBtn">&times;</button>
+      <div class="todo-body">
+        <div class="todo-input-box">
+          <input type="text" class="todo-input" id="todoInput" placeholder="할 일을 입력하세요..." autocomplete="off">
+          <button class="add-btn" id="addBtn">+</button>
+        </div>
+        <div class="todo-list" id="todoList"></div>
       </div>
-      <div class="color-row">
-        <label for="headerColor">헤더 색상</label>
-        <input type="color" id="headerColor" value="#c6def5">
-      </div>
-      <div class="color-row">
-        <label for="bodyColor">배경 색상</label>
-        <input type="color" id="bodyColor" value="#ebf3fc">
-      </div>
-      <div class="color-row">
-        <label for="accentColor">기본 강조색</label>
-        <input type="color" id="accentColor" value="#33332d">
-      </div>
-      <div class="color-row">
-        <label for="starColor">중요 별표 색상</label>
-        <input type="color" id="starColor" value="#f59e0b">
-      </div>
-      <div class="preset-row">
-        <button class="preset-btn" style="background:#c6def5" data-h="#c6def5" data-b="#ebf3fc" data-a="#33332d" data-s="#f59e0b"></button>
-        <button class="preset-btn" style="background:#f5d0d6" data-h="#f5d0d6" data-b="#fdf2f4" data-a="#8a3b48" data-s="#e11d48"></button>
-        <button class="preset-btn" style="background:#cde0d3" data-h="#cde0d3" data-b="#f2f7f4" data-a="#385443" data-s="#059669"></button>
-        <button class="preset-btn" style="background:#e6dcc8" data-h="#e6dcc8" data-b="#f8f5ef" data-a="#5c4d3c" data-s="#d97706"></button>
-        <button class="preset-btn" style="background:#d9d9d9" data-h="#d9d9d9" data-b="#f5f5f5" data-a="#222222" data-s="#4f46e5"></button>
-      </div>
-      <button class="reset-btn" id="resetThemeBtn">초기화</button>
-    </div>
-  </div>
 
-  <script>
-    const todoInput = document.getElementById('todoInput');
-    const addBtn = document.getElementById('addBtn');
-    const todoList = document.getElementById('todoList');
-    const taskCount = document.getElementById('taskCount');
+      <button class="theme-toggle-btn" id="openThemeBtn" title="색상 설정">🎨</button>
 
-    let todos = JSON.parse(localStorage.getItem('notionResponsiveVerticalTodos')) || [];
-
-    function saveAndRender() {
-      localStorage.setItem('notionResponsiveVerticalTodos', JSON.stringify(todos));
-      renderTodos();
-    }
-
-    function renderTodos() {
-      todoList.innerHTML = '';
-      let completedCount = 0;
-
-      const sortedTodos = [...todos].sort((a, b) => {
-        if (a.important === b.important) return 0;
-        return a.important ? -1 : 1;
-      });
-
-      sortedTodos.forEach((todo) => {
-        const index = todos.indexOf(todo);
-        if (todo.completed) completedCount++;
-
-        const item = document.createElement('div');
-        item.classList.add('todo-item');
-        if (todo.completed) item.classList.add('completed');
-        if (todo.important) item.classList.add('important');
-
-        item.innerHTML = `
-          <div class="todo-left">
-            <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}>
-            <span class="todo-text">${escapeHtml(todo.text)}</span>
-          </div>
-          <div class="todo-right">
-            <button class="star-btn ${todo.important ? 'active' : ''}">★</button>
-            <button class="delete-btn">&times;</button>
-          </div>
-        `;
-
-        const checkbox = item.querySelector('.todo-checkbox');
-        checkbox.addEventListener('change', () => {
-          todos[index].completed = checkbox.checked;
-          saveAndRender();
-        });
-
-        const starBtn = item.querySelector('.star-btn');
-        starBtn.addEventListener('click', () => {
-          todos[index].important = !todos[index].important;
-          saveAndRender();
-        });
-
-        const deleteBtn = item.querySelector('.delete-btn');
-        deleteBtn.addEventListener('click', () => {
-          todos.splice(index, 1);
-          saveAndRender();
-        });
-
-        todoList.appendChild(item);
-      });
-
-      taskCount.textContent = `${completedCount}/${todos.length} done`;
-    }
-
-    function addTodo() {
-      const text = todoInput.value.trim();
-      if (!text) return;
-      todos.push({ text, completed: false, important: false });
-      todoInput.value = '';
-      saveAndRender();
-    }
-
-    addBtn.addEventListener('click', addTodo);
-    todoInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') addTodo();
-    });
-
-    function escapeHtml(str) {
-      return str.replace(/[&<>'"]/g, 
-        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-      );
-    }
-
-    renderTodos();
-
-    const root = document.documentElement;
-    const openThemeBtn = document.getElementById('openThemeBtn');
-    const closeThemeBtn = document.getElementById('closeThemeBtn');
-    const themePanel = document.getElementById('themePanel');
-    const headerInput = document.getElementById('headerColor');
-    const bodyInput = document.getElementById('bodyColor');
-    const accentInput = document.getElementById('accentColor');
-    const starInput = document.getElementById('starColor');
-    const resetThemeBtn = document.getElementById('resetThemeBtn');
-
-    const defaultColors = { header: '#c6def5', body: '#ebf3fc', accent: '#33332d', star: '#f59e0b' };
-
-    function applyColors(header, body, accent, star) {
-      root.style.setProperty('--header-bg', header);
-      root.style.setProperty('--body-bg', body);
-      root.style.setProperty('--accent-bg', accent);
-      root.style.setProperty('--star-color', star);
-      headerInput.value = header;
-      bodyInput.value = body;
-      accentInput.value = accent;
-      starInput.value = star;
-      localStorage.setItem('notionResponsiveVerticalTodoTheme', JSON.stringify({ header, body, accent, star }));
-    }
-
-    const savedTheme = JSON.parse(localStorage.getItem('notionResponsiveVerticalTodoTheme'));
-    if (savedTheme) {
-      applyColors(savedTheme.header, savedTheme.body, savedTheme.accent, savedTheme.star || '#f59e0b');
-    }
-
-    openThemeBtn.addEventListener('click', () => themePanel.classList.add('active'));
-    closeThemeBtn.addEventListener('click', () => themePanel.classList.remove('active'));
-
-    headerInput.addEventListener('input', (e) => applyColors(e.target.value, bodyInput.value, accentInput.value, starInput.value));
-    bodyInput.addEventListener('input', (e) => applyColors(headerInput.value, e.target.value, accentInput.value, starInput.value));
-    accentInput.addEventListener('input', (e) => applyColors(headerInput.value, bodyInput.value, e.target.value, starInput.value));
-    starInput.addEventListener('input', (e) => applyColors(headerInput.value, bodyInput.value, accentInput.value, e.target.value));
-
-    document.querySelectorAll('.preset-btn').forEach(btn => {
-      btn.addEventListener('click', () => applyColors(btn.dataset.h, btn.dataset.b, btn.dataset.a, btn.dataset.s));
-    });
-
-    resetThemeBtn.addEventListener('click', () => {
-      applyColors(defaultColors.header, defaultColors.body, defaultColors.accent, defaultColors.star);
-    });
-  </script>
-
-</body>
-</html>
+      <div class="theme-panel" id="themePanel">
+        <div class="panel-header">
+          <span>To do 색상 설정</span>
+          <button class="close-btn" id="closeThemeBtn">&times;</button>
+        </div>
+        <div class="color-row">
+          <label for="headerColor">헤더 색상</label>
+          <input type="color" id="headerColor" value="#c6def5">
+        </div>
+        <div class="color-row">
+          <label for="bodyColor">배경 색상</label>
+          <input type="color" id="bodyColor" value="#ebf3fc">
+        </div>
+        <div class="color-row">
+          <label for="accentColor">기본 강조색</label>
+          <input type="color" id="accentColor" value="#33332d">
+        </div>
+        <div class="color-row">
+          <label for="starColor">중요 별표 색상</label>
+          <input type="color" id="starColor" value="#f59e0b">
+        </div>
+        <div class="preset-row">
+          <button class="preset-btn" style="background:#c6def5" data-h="#c6def5" data-b="#ebf3fc" data-a="#33332d" data-s="#f59e0b"></button>
+          <button class="preset-btn" style="background:#f5d0d6" data-h="#f5d0d6" data-b="#fdf2f4" data-a="#8a3b48" data-s="#e11d48"></button>
+          <button class="preset-btn" style="background:#cde0d3" data-h="#cde0d3" data-b="#f2f7f4" data-a="#385443" data-s="#059669"></button>
+          <button class="preset-btn" style="background:#e6dcc8" data-h="#e6dcc8" data-b="#f8f5ef" data-a="#5c4d3c" data-s="#d97706"></button>
+          <button class="preset-btn" style="background:#d9d9d9"
