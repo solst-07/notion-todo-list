@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fixed Header To-Do List</title>
+  <title>Wrapping Vertical To-Do List</title>
   <style>
     :root {
       --header-bg: #c6def5;
@@ -20,7 +20,6 @@
       padding: 0;
     }
 
-    /* 노션 창 크기에 유연하게 맞추되, 내용이 잘릴 경우 스크롤바 허용 */
     html, body {
       width: 100%;
       height: 100%;
@@ -29,12 +28,11 @@
       font-family: Georgia, "Times New Roman", Times, serif;
     }
 
-    /* 위젯 전체가 화면을 꽉 채우되 고정 레이아웃 유지 */
     .todo-widget {
       position: relative;
       width: 100%;
       height: 100%;
-      min-height: 280px; /* 너무 작아져도 최소한의 공간 확보 */
+      min-height: 280px;
       background-color: var(--body-bg);
       border-radius: 0px;
       display: flex;
@@ -43,7 +41,6 @@
       user-select: none;
     }
 
-    /* 상단 헤더: 절대 줄어들지 않고 고정 높이(42px) 유지 */
     .todo-header {
       background-color: var(--header-bg);
       height: 42px;
@@ -51,7 +48,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-shrink: 0; /* 크기가 줄어도 찌그러짐 방지 */
+      flex-shrink: 0;
     }
 
     .todo-title {
@@ -68,7 +65,6 @@
       font-family: sans-serif;
     }
 
-    /* 본문 영역 */
     .todo-body {
       flex: 1;
       padding: 12px 14px;
@@ -78,7 +74,6 @@
       overflow: hidden;
     }
 
-    /* 입력창 영역: 고정 높이(28px) 유지 */
     .todo-input-box {
       display: flex;
       gap: 6px;
@@ -117,7 +112,6 @@
       flex-shrink: 0;
     }
 
-    /* 할 일 목록 스크롤 영역: 남은 공간을 채우며, 넘치면 스크롤 생성 */
     .todo-list {
       flex: 1;
       overflow-y: auto;
@@ -136,14 +130,15 @@
 
     .todo-item {
       display: flex;
-      align-items: center;
+      align-items: flex-start; /* 멀티라인일 때 체크박스가 위쪽에 예쁘게 붙도록 조정 */
       justify-content: space-between;
       background: rgba(255, 255, 255, 0.65);
-      padding: 6px 8px;
+      padding: 8px;
       font-size: 12px;
       color: var(--text-main);
       border-radius: 0px;
       flex-shrink: 0;
+      gap: 6px;
     }
 
     .todo-item.important {
@@ -160,20 +155,24 @@
 
     .todo-left {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 8px;
-      overflow: hidden;
+      flex: 1;
+      min-width: 0; /* 글자가 영역을 뚫고 나가지 않도록 방지 */
     }
 
     .todo-checkbox {
       cursor: pointer;
       accent-color: var(--accent-bg);
+      margin-top: 1px; /* 글자와 수직 중앙 맞춤 */
+      flex-shrink: 0;
     }
 
+    /* 👇 핵심 수정: 줄바꿈 허용 및 단어 단위 줄바꿈 설정 */
     .todo-text {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      word-break: break-all;
+      white-space: normal;
+      flex: 1;
     }
 
     .todo-right {
@@ -181,6 +180,7 @@
       align-items: center;
       gap: 4px;
       flex-shrink: 0;
+      margin-top: -1px;
     }
 
     .star-btn {
@@ -207,7 +207,6 @@
       color: #ff5a5f;
     }
 
-    /* 팔레트 버튼 */
     .theme-toggle-btn {
       position: absolute;
       bottom: 6px;
@@ -229,7 +228,6 @@
       opacity: 1;
     }
 
-    /* 색상 설정 패널 */
     .theme-panel {
       position: absolute;
       inset: 0;
@@ -363,10 +361,10 @@
     const todoList = document.getElementById('todoList');
     const taskCount = document.getElementById('taskCount');
 
-    let todos = JSON.parse(localStorage.getItem('notionFixedHeaderTodos')) || [];
+    let todos = JSON.parse(localStorage.getItem('notionWrapVerticalTodos')) || [];
 
     function saveAndRender() {
-      localStorage.setItem('notionFixedHeaderTodos', JSON.stringify(todos));
+      localStorage.setItem('notionWrapVerticalTodos', JSON.stringify(todos));
       renderTodos();
     }
 
@@ -465,10 +463,10 @@
       bodyInput.value = body;
       accentInput.value = accent;
       starInput.value = star;
-      localStorage.setItem('notionFixedHeaderTodoTheme', JSON.stringify({ header, body, accent, star }));
+      localStorage.setItem('notionWrapVerticalTodoTheme', JSON.stringify({ header, body, accent, star }));
     }
 
-    const savedTheme = JSON.parse(localStorage.getItem('notionFixedHeaderTodoTheme'));
+    const savedTheme = JSON.parse(localStorage.getItem('notionWrapVerticalTodoTheme'));
     if (savedTheme) {
       applyColors(savedTheme.header, savedTheme.body, savedTheme.accent, savedTheme.star || '#f59e0b');
     }
